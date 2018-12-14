@@ -17,6 +17,7 @@ import multiprocessing
 
 import collections
 
+'''
 
 # ``````````````````````````````````````````````````````````````````````````````
 # This library of functions performs all necessary operations for dseekr
@@ -27,11 +28,11 @@ import collections
 # dseekr, global_tile_seq (now redundant), global_kmer_pearson (now redundant)
 # global_stats
 
-# Future functions:
-# make_kmer_dict(k,bases) return ordereddict
 
 # ``````````````````````````````````````````````````````````````````````````````
+'''
 
+'''
 # This function counts length normalized kmers per kb
 
 # Input:
@@ -41,7 +42,7 @@ import collections
 
 # Output:
 #   1. Array of kmers for sequence (ndarray)
-
+'''
 
 def count_kmers(fa,k,d):
     currlen = len(fa)
@@ -51,7 +52,7 @@ def count_kmers(fa,k,d):
             vals[d[fa[i:i+k]]]+=1
     vals = 1000*(vals/currlen)
     return vals
-
+'''
 # This function normalizes kmer counts relative to the
 # mm10 gencode lncrna reference for a DNA sequence
 # or list of sequences
@@ -66,7 +67,7 @@ def count_kmers(fa,k,d):
 
 # Output:
 #   1. Normalized kmer counts (ndarray)
-
+'''
 def target_norm(ref,target,k):
     means,sd = np.mean(ref,axis=0),np.std(ref,axis=0)
     pos = 4**k
@@ -87,7 +88,7 @@ def target_norm(ref,target,k):
             tilenorms[j] = target_kmer_count_norm
             j+=1
     return tilenorms
-
+'''
 # This function calculates the pearson correlation
 # coefficient between two "kmer arrays"
 
@@ -98,7 +99,7 @@ def target_norm(ref,target,k):
 # Output
 #   1. One dimensional array of pearson r values (ndarray)
 #      of length 4^k
-
+'''
 def kmer_pearson(query,target):
     query = np.log2(query + np.abs(np.min(query)) + 1)
     target = np.log2(target + np.abs(np.min(target)) + 1)

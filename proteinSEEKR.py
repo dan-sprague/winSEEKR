@@ -12,7 +12,7 @@ from itertools import groupby
 from tqdm import tqdm as tqdm
 
 
-from seekr_kmers import SEEKR
+from SEEKR import SEEKR
 
 '''
 @Author: Daniel Sprague
@@ -57,6 +57,7 @@ class proteinSEEKR(SEEKR):
         self.pwms = self.read_motifs()
 
 
+    '''read in motifs '''
 
     def read_motifs(self):
         pwms = [f for f in glob.iglob(self.motif_path+'*') if 'txt' in f]
@@ -79,15 +80,15 @@ class proteinSEEKR(SEEKR):
     def gen_kmersdict(self):
         return dict(zip(self.keys,np.zeros(4**self.k)))
 
-    '''calculate the probability of finding a given kmer within a protein
+    '''
+
+    calculate the probability of finding a given kmer within a protein
     binding motif
 
-    i = current index within k-mer
+    i = current index within motif
     j = window within motif (example: a 7 base pair motif has 3 possible 5mers)
-    c = column name of dataframe, with value either ATCG
+    c = column of PWM, with values A,T,C, or G
 
-    logic: what is the probability of a T at index 1 within window 1 for a
-    given motif?
     '''
     def calc_prob(self,p,j,pwm,kmer):
         for i,c in enumerate(kmer):
@@ -97,6 +98,7 @@ class proteinSEEKR(SEEKR):
                 p*=self.pwms[pwm].iloc[i+j][c]
         return p
 
+    '''for all PWMs, calculate probabilities and store in dictionary'''
 
     def kmer_probabilities(self):
         pwm_dict = collections.defaultdict(list)
