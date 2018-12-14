@@ -109,35 +109,26 @@ class proteinSEEKR(SEEKR):
             if len(self.pwms[pwm]) < self.k:
                 '''
                 is the length of the motif less than the value of k?
-                If so, try k - 1
-
-                This is currently written only with k = 5 in mind, which
-                for most purposes is the best choice. Motifs are rarely longer
-                than 6 base pairs as well
-
-                Future development:
-                No motif is less than 4 base pairs, meaning a 4-mer will always
-                exist within the motif. However if a larger value of k is used, and the motif
-                is too short for that value of k, perhaps code should
-                simply default to k = 4 in those cases
                 '''
                 d = self.gen_kmersdict()
+                kmers_within_kmer = [([kmer[i:i+(4)] for i in range(self.k-(4)+1)],kmer) for kmer in self.keys]
                 '''
-                Find all 4mers within the larger k-mer
-                example: ATCGT for a 4 base pair motif
+                kmers_within_kmer
+                -----------------
+                Find all 4-mers within the larger k-mer
+                example error: 5-mer ATCGT in a 4 base pair motif
 
                 This 5-mer does not exist within the 4 base pair motif,
                 but the two 4-mers within the 5-mer,
                 ATCG and TCGT can fit within the 4 base pair motif
 
-                Calculate the probabilities of observation the 4mers
+                Calculate the probabilities of observing the 4mers
                 seperately and then sum results
-                '''
-                kmers_within_kmer = [([kmer[i:i+(self.k-1)] for i in range(self.k-(self.k-1)+1)],kmer) for kmer in self.keys]
 
-                nkmers = lenmotif - self.k
-                'start list represents the possible windows within the motif'
-                start = list(range(nkmers))
+                No motif is < 4 base pairs, hence default of k = 4
+                '''
+                nkmers = lenmotif - 4 + 1
+                start = list(range(nkmers)) # possible starting positions of a k-mer in a motif
 
                 for sub_kmers,kmer in kmers_within_kmer:
                     for sub_kmer in sub_kmers:
@@ -171,7 +162,7 @@ class proteinSEEKR(SEEKR):
 
     '''
     get the k-mer zscores from the k-mer profile as a dataframe and re-index
-    by the k-mer names (AAAA,AAAT,AAAC,AAAG,...,GGGG)
+    by the k-mer names (index = (AAAA,AAAT,AAAC,AAAG,...,GGGG))
     '''
     def get_zscore_df(self):
         df = pd.DataFrame.from_dict(self.kmer_profile)
@@ -184,17 +175,14 @@ class proteinSEEKR(SEEKR):
     '''
     def kmer_weights(self,SEEKRobject,probabilities):
         zscores,scoredict = self.get_zscore_df(SEEKRobject), collections.defaultdict(list)
-        '''
-        for each PWM (key in proabiabilities)
-        '''
-        for key in probabilities:
+        for pwm_name in probabilities:
             working_zscores,working_weights = zscores.copy(), probabilities[key].copy()
             for index,row in working_zscores.iterrows():
                 row = row * working_weights[index]
                 working_zscores.loc[index] = row
             scores =[]
-            for rep in working_zscores:
-                scores.append(sum(v for v in working_zscores[rep]))
+            for sequence in working_zscores:
+                scores.append(sum(v for v in working_zscores[sequence]))
             scoredict[key] = scores
         return scoredict
 
