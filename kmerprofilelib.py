@@ -70,8 +70,7 @@ def count_kmers(fa,k,d):
 '''
 def target_norm(ref,target,k):
     means,sd = np.mean(ref,axis=0),np.std(ref,axis=0)
-    pos = 4**k
-    bases = ['A','T','C','G']
+    pos,bases = 4**k,['A','T','C','G']
     keys = [''.join(p) for p in itertools.product(bases,repeat=k)]
     d = collections.OrderedDict(zip(keys,range(0,pos)))
     if len(target) == 1:
