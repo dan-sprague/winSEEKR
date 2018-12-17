@@ -33,10 +33,15 @@ motifs MUST be in the format used in the CISBP-Rna database (http://cisbp-rna.cc
 Create a SEEKR object by calling:
 ```
 from SEEKR import SEEKR
-SEEKRobject = SEEKR(/path/to/fasta.fa,k=5,reference='/path/to/ref.fa')
+SEEKRobject = SEEKR('/path/to/fasta.fa',k=5,reference='/path/to/ref.fa')
 ```
 
-If you have a saved reference matrix, simply do not specify the reference variable and the pickle file will be loaded from the current directory
+If you have a saved reference matrix, pass the path to the pickle file:
+
+```
+from SEEKR import SEEKR
+SEEKRobject = SEEKR('/path/to/fasta.fa',k=5,reference='/path/to/saved/pickle.p')
+```
 
 
 ### kmer_profile()
