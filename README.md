@@ -1,2 +1,32 @@
 # SEEKR
 a collection of tools for RNA/DNA sequence analysis
+
+Requirements
+
+Python3.6 (Anaconda distribution recommended for other libraries)
+
+
+Inputs: 
+
+SEEKR 
+
+1. Fasta file of sequences of interest (any valid fasta format)
+2. Fasta file of reference set of sequences (any valid fasta format)
+3. Value of k
+
+proteinSEEKR
+
+1. All requirements of SEEKR
+2. path to motif file in plain text
+
+motifs MUST be in the format used in the CISBP-Rna database (http://cisbp-rna.ccbr.utoronto.ca) 
+
+Pos	A	C	G	U
+1	0.109804549527276	0.856031637939824	0.0170819044177939	0.0170819044177939
+2	0.108255211143277	0.76485833121434	0.0170819044177939	0.109804549527276
+3	0.856031637939824	0.0170819044177939	0.0170819044177939	0.109804549527276
+4	0.593491811528232	0.0170819044177939	0.103135658222238	0.286290622134421
+5	0.312760833839568	0.502420296283448	0.040993376028484	0.143825489481627
+6	0.0642751501391216	0.807174542424277	0.0642751501391216	0.0642751501391216
+7	0.0880498710944913	0.735850379141296	0.0880498710944913	0.0880498710944913
+
