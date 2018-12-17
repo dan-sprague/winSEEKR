@@ -9,23 +9,6 @@ All requirements can be installed with pip using:
 
 pip install -r requirements.txt
 
-
-### Inputs: 
-
-#### SEEKR 
-
-1. Fasta file of sequences of interest (any valid fasta format)
-2. Fasta file of reference set of sequences (any valid fasta format)
-3. Value of k
-
-#### proteinSEEKR
-
-1. All requirements of SEEKR
-2. path to motif file in plain text
-
-motifs MUST be in the format used in the CISBP-Rna database (http://cisbp-rna.ccbr.utoronto.ca) 
-
-
 # API
 
 ## SEEKR
@@ -75,6 +58,9 @@ Save a pickle of the reference matrix in the current directory
 ## proteinSEEKR
 
 For use in identifying likely proteins that bind a given DNA/RNA sequence
+
+motifs MUST be in the format used in the CISBP-Rna database (http://cisbp-rna.ccbr.utoronto.ca) 
+
 
 To create a proteinSEEKR object:
 
