@@ -38,7 +38,11 @@ variable = SEEKR(/path/to/fasta.fa,k=5,reference='/path/to/ref.fa')
 ### kmer_profile
 Creates a dictionary entry for each sequence-of-interest, where the key is the name of the sequence as specified in the .fasta file and the values are a vector of k-mer counts (length 4^k)
 
-This function is called when a SEEKR object is created and exists as an attribute of the SEEKR object
+This function is called when a SEEKR object is created and exists as an attribute of the SEEKR object and can be accessed by:
+
+```
+profile = SEEKRobject.kmer_profile
+```
 
 ### generate_ref *reference*=/path/to/reference.fa
 Creates a matrix of k-mer counts that serves as a reference set to standardize k-mer counts in sequences-of-interest. Example reference sets might be GENCODE lncRNA annotations, mRNA transcripts, etc...
