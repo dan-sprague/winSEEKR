@@ -100,7 +100,7 @@ def target_norm(ref,target,k):
 #      of length 4^k
 '''
 def kmer_pearson(query,target):
-    query = np.log2(query + np.abs(np.min(query)) + 1)
+    query = np.log2(query + np.abs(np.min(query)) + 1) #translate and log transform
     target = np.log2(target + np.abs(np.min(target)) + 1)
     R,i = np.zeros(len(target)),0
     R[R==0] = np.nan
@@ -147,7 +147,7 @@ def make_plot(lncref,R,title,xtitle,savename,sd):
     x,y = [None,None]
     lncref = pd.DataFrame(lncref,columns=['Rval'])
     rpass = [(R.index[R['Rval']==point][0],point) for point in R['Rval'] if point >= lncref['Rval'].mean()+(lncref['Rval'].std()*sd)]
-    if len(rpass) > 0:
+    if len(rpass) > 0: # is there anything to plot?
         x,y = zip(*rpass)
     fig,(ax1,ax2) = plt.subplots(1,2,figsize=(14,4.8),sharey=True,gridspec_kw = {'width_ratios':[1, 5]})
     sns.distplot(lncref[lncref['Rval']<.3],vertical=True,ax=ax1,label='mm10 lncome',color='C1')
@@ -163,7 +163,7 @@ def make_plot(lncref,R,title,xtitle,savename,sd):
 
 
     ax2.set_xlim([0, len(R)])
-
+    # This code is a for a specific experiment done earlier, remove when developing further
     locs = list(ax2.get_xticks())
     locs+=[34,77,198,207,281,292,348,991,1196,1272]
     ax2.set_xticks(list(np.arange(0,len(R),500))+locs)
@@ -182,18 +182,36 @@ def make_plot(lncref,R,title,xtitle,savename,sd):
     plt.close()
     return
 
+
+'''
+legacy code
+
+This function fragments a DNA sequence into overlapping tiles, and then performs
+SEEKR against a set of query sequences that are known to represent some biological
+function/phenomena (for example, the tandem repeats of Xist). The output is a plot
+of the pearson values going along the length of the tiled DNA sequence. Pearson scores
+higher than 3sd of our reference distribution are highlighted as 'hits'
+
+This function is called by the partial() function in a launching script using
+the multiprocessing module
+
+This function is going to be split and implemented into a more abstracted structure
+in future development, however this function represents a standard workflow for our
+work
+
+'''
 def dseekr(sd,tiled,l,s,plot_dict,lncref,queryfiles,plotrefs,k,fa_files):
     #Tile the currently open fa file
-    queryfiles_kmers = dict([(i,v) for i,v in queryfiles.items() if f'{k}mer' in i])
-    queryfiles_kmers = dict(sorted(queryfiles_kmers.items()))
-    lncref_kmers = [v for i,v in lncref.items() if f'{k}mer' in i]
+    queryfiles_kmers = dict([(i,v) for i,v in queryfiles.items() if f'{k}mer' in i]) # extract query kmer set for appropriate value of k
+    queryfiles_kmers = dict(sorted(queryfiles_kmers.items())) # "sort" the keys alphabetically
+    lncref_kmers = [v for i,v in lncref.items() if f'{k}mer' in i] #extract the reference set for the approopriate value of k
     if not tiled:
         curr_tile_fa = tile_seq(fa_files,l,s)
     elif tiled:
         infile = open(fa_files)
         curr_tile_fa = [line.upper() for line in infile]
     #Calculate normalized 4,5,6mers
-    curr_normcount = target_norm(lncref_kmers[0],curr_tile_fa,k)
+    curr_normcount = target_norm(lncref_kmers[0],curr_tile_fa,k) # calculate standardized and length norm'd k-mer counts
     for query in queryfiles_kmers:
         print(query)
         lncomedata = plotrefs[plot_dict[os.path.basename(query)]]
@@ -205,23 +223,19 @@ def dseekr(sd,tiled,l,s,plot_dict,lncref,queryfiles,plotrefs,k,fa_files):
         np.savetxt(f'{os.path.basename(query)}_{os.path.basename(fa_files)}_data.txt',R,delimiter=',')
 
 
-def global_tile_seq(fa,length,skip):
-    fa = fa.upper()
-    tiles = [fa[i:i+length] for i in range(0,len(fa),skip)]
-    return tiles
+'''
 
-def global_kmer_pearson(query,target):
-    query = np.log2(query + np.abs(np.min(query)) + 1)
-    target = np.log2(target + np.abs(np.min(target)) + 1)
-    R = np.zeros(len(target))
-    R[R==0] = np.nan
-    i = 0
-    for row in target:
-        R[i] = pearsonr(query,row)[0]
-        i+=1
-    return R
+This function fragments a DNA sequence into overlapping tiles, and then performs
+SEEKR against a set of query sequences that are known to represent some biological
+function/phenomena (for example, the tandem repeats of Xist ). The output is a
+score representing how similar a transcript is to Xist.
 
+This function is called by the partial() function in a launching script using
+the multiprocessing module
 
+This function is going to be split and implemented into a more abstracted structure
+in future development and combined with the dseekr function above.
+'''
 def global_stats(sd,l,s,plot_dict,lncref,queryfiles,plotrefs,lncrnas,out,k):
     queryfiles_kmers = dict([(i,v) for i,v in queryfiles.items() if f'{k}mer' in i])
     lncref_kmers = [v for i,v in lncref.items() if f'{k}mer' in i]
@@ -240,14 +254,14 @@ def global_stats(sd,l,s,plot_dict,lncref,queryfiles,plotrefs,lncrnas,out,k):
     queryids = dict(zip(list(queryfiles_kmers),range(len(queryfiles_kmers))))
 
     for i,seq in enumerate(seqs):
-        curr_tile_fa = global_tile_seq(seq,l,s)
+        curr_tile_fa = tile_seq(seq,l,s)
         curr_normcount = target_norm(lncref_kmers[0],curr_tile_fa,k)
 
         for query in queryfiles_kmers:
             lncomedata = plotrefs[query]
             thresh = np.mean(lncomedata)+np.std(lncomedata)*sd
             curr_q = queryfiles_kmers[query]
-            R = global_kmer_pearson(curr_q,curr_normcount)
+            R = kmer_pearson(curr_q,curr_normcount)
             sig_hits = len(R[R>thresh])
             counts[i][queryids[query]] = sig_hits/len(curr_tile_fa)
 

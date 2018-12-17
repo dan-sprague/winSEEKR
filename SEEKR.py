@@ -76,8 +76,7 @@ class SEEKR(object):
 
         kmerprofile_dict = {}
         ref_kmers = [v for i,v in self.reference.items() if f'{self.k}mer' in i]
-        seqs = self.fasta.get_seqs()
-        headers = self.fasta.get_headers()
+        seqs,headers = self.fasta.get_seqs(), self.fasta.get_headers()
         arr = (kmerprofilelib.target_norm(ref_kmers[0],seqs,self.k))
         ``` translate and log transform ```
         arr = np.log2(arr+np.abs(np.min(arr))+1)
