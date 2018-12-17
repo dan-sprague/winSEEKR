@@ -57,9 +57,7 @@ Save a pickle of the reference matrix in the current directory
 
 ## proteinSEEKR
 
-For use in identifying likely proteins that bind a given DNA/RNA sequence
-
-motifs MUST be in the format used in the CISBP-Rna database (http://cisbp-rna.ccbr.utoronto.ca) 
+For use in identifying likely proteins that bind a given DNA/RNA sequence. Motifs MUST be in the format used in the CISBP-Rna database (http://cisbp-rna.ccbr.utoronto.ca) 
 
 
 To create a proteinSEEKR object:
