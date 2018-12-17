@@ -104,6 +104,14 @@ class SEEKR(object):
         arr = np.array(arr)
         ref[f'ref_{self.k}mers'] = arr
         return ref
+
+    '''
+    Calculate pairwise pearon's correlations within a dictionary containing > 1
+    k-mer profiles
+
+    Input: Dictionary of k-mer profiles, or the kmer_profile attribute of a SEEKR object
+    Output: pandas dataframe 
+    '''
     def correlate_kmerprofiles(self,savename=None):
         df = pd.DataFrame.from_dict(self.kmer_profile)
         corr = df.corr()
