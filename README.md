@@ -1,7 +1,7 @@
 # SEEKR
 A collection of tools for RNA/DNA sequence analysis
 
-SEEKR = **SE**quence **E**valuation **K**-mer **R**epresentation
+SEEKR = **SE**quence **E**valuation by **K**-mer **R**epresentation
 
 ## Requirements
 
