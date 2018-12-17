@@ -28,7 +28,7 @@ class SEEKR(object):
     '''
     Implements the core essentials of SEEKR analyis for use in more specialized
     analysis or as a standalone tool
-    
+
     Parameters
     ----------
 
@@ -57,7 +57,7 @@ class SEEKR(object):
         self.bases = ['A','T','C','G']
         self.keys = [''.join(p) for p in itertools.product(self.bases,repeat=self.k)]
         if reference is None:
-            self.reference = pickle.load(open('./ref/ref.p','rb'))
+            self.reference = pickle.load(open('./ref.p','rb'))
         else:
             self.reference = self.generate_ref(reference)
 
@@ -79,8 +79,11 @@ class SEEKR(object):
         seqs = self.fasta.get_seqs()
         headers = self.fasta.get_headers()
         arr = (kmerprofilelib.target_norm(ref_kmers[0],seqs,self.k))
+        ``` translate and log transform ```
+        arr = np.log2(arr+np.abs(np.min(arr))+1)
+        ``````
         for seq_name,row in enumerate(arr):
-            kmerprofile_dict[f'{headers[seq_name]}_5mers'] = row
+            kmerprofile_dict[f'{headers[seq_name]}_{self.k}mers'] = row
         return kmerprofile_dict
 
     '''
@@ -102,6 +105,12 @@ class SEEKR(object):
         arr = np.array(arr)
         ref[f'ref_{self.k}mers'] = arr
         return ref
+    def correlate_kmerprofiles(self,savename=None):
+        df = pd.DataFrame.from_dict(self.kmer_profile)
+        corr = df.corr()
+        if savename:
+            corr.to_csv(f'./{savename}.csv')
+        return corr
 
     def save_kmer_profile(self,savename='kmer_profile'):
         pickle.dump(self.kmer_profile,open(f'./{savename}.p','wb'))
