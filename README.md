@@ -37,7 +37,7 @@ profile = SEEKRobject.kmer_profile
 ```
 
 ### generate_ref(*reference*='/path/to/reference.fa')
-Creates a matrix of k-mer counts that serves as a reference set to standardize k-mer counts in sequences-of-interest. Example reference sets might be GENCODE lncRNA annotations, mRNA transcripts, etc...
+Creates a matrix of k-mer counts that serves as a reference for the mean and standard deviation of each k-mer's frequency. Example reference sets might be GENCODE lncRNA annotations, mRNA transcripts, etc...
 
 If a path to reference fasta is passed, function is called at instantiation and stored as an attribute
 
