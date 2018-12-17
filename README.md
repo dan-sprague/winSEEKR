@@ -1,6 +1,8 @@
 # SEEKR
 A collection of tools for RNA/DNA sequence analysis
 
+SEEKR = **SE**quence **E**valuation **K**-mer **R**epresentation
+
 ## Requirements
 
 Python3.6 (Anaconda distribution recommended for other libraries)
