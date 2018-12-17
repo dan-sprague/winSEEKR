@@ -118,5 +118,5 @@ Convert dictionary of k-mer weighted zscores to a pandas dataframe, name columns
 ### map_proteins(path,scoredf):
 Map protein names to their associated motif PWMs. Required a path to the correct .txt file providing the information and a dataframe of k-mer weighted z-scores
 
-```pSEEKRobject.map_proteins('/path/to/RBP_info.txt',weighted_zscores_dict)```
+```pSEEKRobject.map_proteins('/path/to/RBP_info.txt',pSEEKRobject.get_scoredataframe(weighted_zscores)```
 
