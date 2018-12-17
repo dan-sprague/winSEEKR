@@ -71,3 +71,45 @@ Save a pickle of the current kmer_profile attribute in the current directory
 
 ### save_ref(*savename* = *str*)
 Save a pickle of the reference matrix in the current directory
+
+## proteinSEEKR
+
+For use in identifying likely proteins that bind a given DNA/RNA sequence
+
+To create a proteinSEEKR object:
+
+```
+pSEEKRobject = proteinSEEKR('path/to/motifs.txt', 'path/to/fasta/file.fasta',k,reference = '/path/to/ref.fa')
+```
+
+### read_motifs()
+returns a dictionary of PWMs with filenames as keys and pandas dataframes as values
+
+This method is called at instantiation and is stored in the attribute **pwms**
+
+### gen_kmersdict()
+returns a dictionary with kmers ('AAAA','AAAG','AAAC','AAAT',...,'TTTT') as keys, and 0 for each value. For use in counting kmers and called in other functions
+
+### calc_prob(p,j,pwm,kmer)
+traverses a matrix M to multiply Mi+j,c values together to produce a crude probability for finding a kmer within a motif.
+
+p = probability and passed as None, j = window within the motif currently under consideration, pwm = matrix, kmer = current k-mer under consideration
+
+This function is called from kmer_probabilities 
+
+### kmer_probabilities()
+returns a dictionary of kmers as keys and a crude probability of finding that k-mer within a given PWM as values
+
+If the value of k is larger than the size of a given motif, for example a 4 base pair motif and k = 5, each k-mer is broken down into constitutive 4-mers, and then the probability of finding each 4mer within the motif are summed to represent the likelihood of the 5mer occuring. 
+
+### save_kmerprobs(kmerprobdict,savename)
+ saves a given dictionary of k-mer probabilities (as calculated in kmer_probabilities) as a pickle file with a given savename in the current directory
+ 
+### get_zscore_df()
+Converts dictionary k-mer profile into a pandas dataframe indexed by k-mer names
+
+### kmer_weights(kmerprofile,probabilities)
+Returns a dictionary with the PWM name as the key and probability weighted z-scores as the values. These values represent a combined measure of the enrichment of a k-mer and likelihood of binding to that k-mer
+
+``` pSEEKRobject.kmer_weights(pSEEKRobject.kmer_probabilities())```
+
