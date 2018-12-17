@@ -20,8 +20,8 @@ import collections
 '''
 
 # ``````````````````````````````````````````````````````````````````````````````
-# This library of functions performs all necessary operations for dseekr
-# lncRNA analysis
+# This library of functions performs all necessary operations for k-mer
+# analysis of RNA/DNA
 
 # Members:
 # count_kmers, target_norm, kmer_pearson, tile_seq, make_plot
