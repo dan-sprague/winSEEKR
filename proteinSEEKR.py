@@ -50,7 +50,7 @@ class proteinSEEKR(SEEKR):
 
     '''
 
-    def __init__(self,motif_path,fasta_file,k=5,reference=None):
+    def __init__(self,motif_path,fasta_file,k=5,reference):
         super(proteinSEEKR,self).__init__(fasta_file,k,reference)
 
         self.motif_path = motif_path
@@ -173,8 +173,8 @@ class proteinSEEKR(SEEKR):
     weight the k-mer z-scores by the probability of finding the k-mer within
     a protein binding motif
     '''
-    def kmer_weights(self,SEEKRobject,probabilities):
-        zscores,scoredict = self.get_zscore_df(SEEKRobject), collections.defaultdict(list)
+    def kmer_weights(self,probabilities):
+        zscores,scoredict = self.get_zscore_df(self.kmer_profile), collections.defaultdict(list)
         for pwm_name in probabilities:
             working_zscores,working_weights = zscores.copy(), probabilities[key].copy()
             for index,row in working_zscores.iterrows():
@@ -194,13 +194,6 @@ class proteinSEEKR(SEEKR):
         df = pd.DataFrame.from_dict(scoredict,orient='index')
         df.columns = cols
         return df
-
-    '''
-    save a dataframe object
-    '''
-    def save_df(self,df,path='./dataframe.csv'):
-        pd.to_csv(df,path)
-        return
 
     '''
     map the proteins that recognize a given motif to the correct motif within

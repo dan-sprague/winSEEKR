@@ -50,14 +50,14 @@ class SEEKR(object):
 
     '''
 
-    def __init__(self,fasta_file,k=5,reference=None):
+    def __init__(self,fasta_file,k=5,reference):
         self.fasta_file = fasta_file
         self.fasta = far.Reader(fasta_file)
         self.k = k
         self.bases = ['A','T','C','G']
         self.keys = [''.join(p) for p in itertools.product(self.bases,repeat=self.k)]
-        if reference is None:
-            self.reference = pickle.load(open('./ref.p','rb'))
+        if reference[:-1] is 'p':
+            self.reference = pickle.load(open(reference,'rb'))
         else:
             self.reference = self.generate_ref(reference)
 
