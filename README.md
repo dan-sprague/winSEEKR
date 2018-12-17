@@ -3,6 +3,8 @@ A collection of tools for RNA/DNA sequence analysis
 
 SEEKR = **SE**quence **E**valuation by **K**-mer **R**epresentation
 
+See Jessime Kirk's & Calabrese Labs paper here: https://www.nature.com/articles/s41588-018-0207-8
+
 ## Requirements
 
 Python3.6 (Anaconda distribution recommended for other libraries)
