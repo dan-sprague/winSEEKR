@@ -5,6 +5,10 @@ Requirements
 
 Python3.6 (Anaconda distribution recommended for other libraries)
 
+All requirements can be installed with pip using:
+
+pip install -r requirements.txt
+
 
 Inputs: 
 
