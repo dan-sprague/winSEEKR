@@ -1,7 +1,7 @@
 # SEEKR
 A collection of tools for RNA/DNA sequence analysis
 
-##Requirements
+## Requirements
 
 Python3.6 (Anaconda distribution recommended for other libraries)
 
@@ -10,15 +10,15 @@ All requirements can be installed with pip using:
 pip install -r requirements.txt
 
 
-###Inputs: 
+### Inputs: 
 
-####SEEKR 
+#### SEEKR 
 
 1. Fasta file of sequences of interest (any valid fasta format)
 2. Fasta file of reference set of sequences (any valid fasta format)
 3. Value of k
 
-####proteinSEEKR
+#### proteinSEEKR
 
 1. All requirements of SEEKR
 2. path to motif file in plain text
