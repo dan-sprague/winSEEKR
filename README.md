@@ -57,6 +57,10 @@ If a path to reference fasta is passed, function is called at instantiation and 
 reference = SEEKRobject.reference
 ```
 
+### correlate_kmerprofiles(*savename*=*str*)
+
+Takes the k-mer profile of a SEEKR object and calculates the Pearson correlation between them. If a savename is passed, a csv file is saved in the current directory.
+
 ### save_kmer_profile(*savename*=*str*)
 Save a pickle of the current kmer_profile attribute in the current directory
 
