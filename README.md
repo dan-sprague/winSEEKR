@@ -30,6 +30,11 @@ motifs MUST be in the format used in the CISBP-Rna database (http://cisbp-rna.cc
 
 ## SEEKR
 
+Create a SEEKR object by calling:
+```
+from SEEKR import SEEKR
+variable = SEEKR(/path/to/fasta.fa,k=5,reference='/path/to/ref.fa')
+```
 ### kmer_profile
 Creates a dictionary entry for each sequence-of-interest, where the key is the name of the sequence as specified in the .fasta file and the values are a vector of k-mer counts (length 4^k)
 
