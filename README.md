@@ -13,7 +13,7 @@ Python3.6 (Anaconda distribution recommended for other libraries)
 
 pip install -r requirements.txt
 
-# Test Data
+## Included Test Data
 
 Includes
 1. test_xistandrsxrepeats.fa -> represents your experimental sequences of interest
