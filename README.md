@@ -13,6 +13,22 @@ Python3.6 (Anaconda distribution recommended for other libraries)
 
 pip install -r requirements.txt
 
+# Test Data
+
+Includes
+1. test_xistandrsxrepeats.fa -> represents your experimental sequences of interest
+2. test_reference_gencodelncrna -> represents whatever reference set of sequences you wish to use
+3. pwms/ -> directory containing motifs and metadata files 
+
+Specifically, in this test case you want:
+/pwms/Homo_sapiens_2018_10_23_1-29_pm/pwms_all_motifs and /pwms/RBP_Information_all_motifs.txt
+
+# Scripts
+
+## Get correlation matrix of k-mer content between sequences
+
+### seekranalysis.py 
+
 # API
 
 ## SEEKR
