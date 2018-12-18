@@ -24,7 +24,7 @@ Includes
 
 ## seekranalysis.py -fa -ref -k -savecorr
 
--fa : fasta file containing experimental sequences of interest
+-fa : fasta file containing experimental sequences of interest<br/>
 -ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation
 -k : value of k to use, typically between 4 and 6 inclusive
 -savecorr : filename for correlation matrix, if not specified matrix will only be printed to terminal
