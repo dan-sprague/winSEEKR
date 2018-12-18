@@ -25,9 +25,20 @@ Specifically, in this test case you want:
 
 # Scripts
 
-## Get correlation matrix of k-mer content between sequences
+## seekranalysis.py -fa -ref -k -savecorr
 
-### seekranalysis.py 
+-fa : fasta file of experimental sequences of interest
+-ref : fasta file of sequences to be used as a reference for k-mer z-score calculation
+-k : value of k to use, typically between 4 and 6 inclusive
+-savecorr : filename for correlation matrix, if not specified matrix will only be printed to terminal
+
+
+**Usage Example**
+
+```
+python seekranalysis.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Data/test_reference_gencodelncrna.fa  -k 5
+```
+
 
 # API
 
