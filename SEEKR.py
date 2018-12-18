@@ -64,7 +64,9 @@ class SEEKR(object):
         self.kmer_profile = self.kmer_profile()
         self.seqnames = self.fasta.get_headers()
 
-    '''generate a dictionary of kmers as keys and '0' as the value'''
+    '''
+    generate a dictionary of kmers as keys and '0' as the value
+    '''
     def gen_kmersdict(self):
         return dict(zip(self.keys,np.zeros(4**self.k)))
 
@@ -78,9 +80,10 @@ class SEEKR(object):
         ref_kmers = [v for i,v in self.reference.items() if f'{self.k}mer' in i]
         seqs,headers = self.fasta.get_seqs(), self.fasta.get_headers()
         arr = (kmerprofilelib.target_norm(ref_kmers[0],seqs,self.k))
-        ``` translate and log transform ```
+        ''' translate and log transform
+        '''
         arr = np.log2(arr+np.abs(np.min(arr))+1)
-        ``````
+
         for seq_name,row in enumerate(arr):
             kmerprofile_dict[f'{headers[seq_name]}_{self.k}mers'] = row
         return kmerprofile_dict
@@ -118,7 +121,7 @@ class SEEKR(object):
         if savename:
             corr.to_csv(f'./{savename}.csv')
         return corr
-        
+
     def save_kmer_profile(self,savename='kmer_profile'):
         pickle.dump(self.kmer_profile,open(f'./{savename}.p','wb'))
 
