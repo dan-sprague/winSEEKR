@@ -9,7 +9,7 @@ See Jessime Kirk's & Calabrese Labs paper here: https://www.nature.com/articles/
 
 Python3.6 (Anaconda distribution recommended for other libraries)
 
-All requirements can be installed with pip using:
+**cd to the directory you cloned this repo to** and install requirements using the command:
 
 pip install -r requirements.txt
 
