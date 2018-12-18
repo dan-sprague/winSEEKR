@@ -50,8 +50,8 @@ class proteinSEEKR(SEEKR):
 
     '''
 
-    def __init__(self,motif_path,fasta_file,k=5,reference):
-        super(proteinSEEKR,self).__init__(fasta_file,k,reference)
+    def __init__(self,motif_path,fasta_file,reference,k):
+        super(proteinSEEKR,self).__init__(fasta_file,reference,k)
 
         self.motif_path = motif_path
         self.pwms = self.read_motifs()
@@ -174,25 +174,25 @@ class proteinSEEKR(SEEKR):
     a protein binding motif
     '''
     def kmer_weights(self,probabilities):
-        zscores,scoredict = self.get_zscore_df(self.kmer_profile), collections.defaultdict(list)
+        zscores,scoredict = self.get_zscore_df(), collections.defaultdict(list)
         for pwm_name in probabilities:
-            working_zscores,working_weights = zscores.copy(), probabilities[key].copy()
+            working_zscores,working_weights = zscores.copy(), probabilities[pwm_name].copy()
             for index,row in working_zscores.iterrows():
                 row = row * working_weights[index]
                 working_zscores.loc[index] = row
             scores =[]
             for sequence in working_zscores:
                 scores.append(sum(v for v in working_zscores[sequence]))
-            scoredict[key] = scores
+            scoredict[pwm_name] = scores
         return scoredict
 
     '''
     convert the weighted z score dictionary to a dataframe and rename columns
     to the name of the sequences
     '''
-    def get_scoredataframe(self,scoredict,cols):
+    def get_scoredataframe(self,scoredict):
         df = pd.DataFrame.from_dict(scoredict,orient='index')
-        df.columns = cols
+        df.columns = self.seqnames
         return df
 
     '''
