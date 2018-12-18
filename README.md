@@ -9,7 +9,7 @@ See Jessime Kirk's & Calabrese Labs paper here: https://www.nature.com/articles/
 
 Python3.6 (Anaconda distribution recommended for other libraries)
 
-All requirements can be installed with pip using:
+**cd to the directory you cloned this repo to** and install requirements using the command:
 
 pip install -r requirements.txt
 
@@ -17,10 +17,18 @@ pip install -r requirements.txt
 
 ## SEEKR
 
-Create a SEEKR object by calling:
+Three parameters are required to use SEEKR:
+1. Fasta file of sequences you are studying 
+2. Value of k, typically between 4 and 6
+3. Fasta file of sequences that comprise a reference set, for example the GENCODE lncRNA annotation fasta file
+
+The 'reference' fasta is used to get the mean and standard deviation for each k-mer in the SEEKR algorithm
+
+
+Create a SEEKR instance by calling:
 ```
 from SEEKR import SEEKR
-SEEKRobject = SEEKR('/path/to/fasta.fa',k=5,reference='/path/to/ref.fa')
+SEEKRobject = SEEKR(fasta_file='/path/to/fasta.fa',k=5,reference='/path/to/ref.fa')
 ```
 
 If you have a saved reference matrix, pass the path to the pickle file:
