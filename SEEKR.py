@@ -50,7 +50,7 @@ class SEEKR(object):
 
     '''
 
-    def __init__(self,fasta_file,k=5,reference):
+    def __init__(self,fasta_file,reference,k):
         self.fasta_file = fasta_file
         self.fasta = far.Reader(fasta_file)
         self.k = k
