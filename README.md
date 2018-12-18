@@ -25,9 +25,9 @@ Includes
 ## seekranalysis.py -fa -ref -k -savecorr
 
 -fa : fasta file containing experimental sequences of interest<br/>
--ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation
--k : value of k to use, typically between 4 and 6 inclusive
--savecorr : filename for correlation matrix, if not specified matrix will only be printed to terminal
+-ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation<br/>
+-k : value of k to use, typically between 4 and 6 inclusive<br/>
+-savecorr : filename for correlation matrix, if not specified matrix will only be printed to terminal<br/>
 
 **Usage Example**
 ```
@@ -35,12 +35,12 @@ python seekranalysis.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Da
 ```
 
 ## motifscanner.py -fa -ref -k -pwm -pwmmeta --savedf
--fa : fasta file containing experimental sequences of interest
--ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation
--k : value of k to use, typically between 4 and 6 inclusive
--pwms : path to **folder** containing position weight matrices (PWMs)
--pwmmeta : txt file containing the metadata for each motif
---savedf : save name for dataframe containing the results, to be saved in working directory 
+-fa : fasta file containing experimental sequences of interest<br/>
+-ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation<br/>
+-k : value of k to use, typically between 4 and 6 inclusive<br/>
+-pwms : path to **folder** containing position weight matrices (PWMs)<br/>
+-pwmmeta : txt file containing the metadata for each motif<br/>
+--savedf : save name for dataframe containing the results, to be saved in working directory <br/>
 
 **Usage Example**
 
