@@ -20,25 +20,33 @@ Includes
 2. test_reference_gencodelncrna -> represents whatever reference set of sequences you wish to use
 3. pwms/ -> directory containing motifs and metadata files 
 
-Specifically, in this test case you want:
-/pwms/Homo_sapiens_2018_10_23_1-29_pm/pwms_all_motifs and /pwms/RBP_Information_all_motifs.txt
-
 # Scripts
 
 ## seekranalysis.py -fa -ref -k -savecorr
 
--fa : fasta file of experimental sequences of interest
--ref : fasta file of sequences to be used as a reference for k-mer z-score calculation
+-fa : fasta file containing experimental sequences of interest
+-ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation
 -k : value of k to use, typically between 4 and 6 inclusive
 -savecorr : filename for correlation matrix, if not specified matrix will only be printed to terminal
 
-
 **Usage Example**
-
 ```
 python seekranalysis.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Data/test_reference_gencodelncrna.fa  -k 5
 ```
 
+## motifscanner.py -fa -ref -k -pwm -pwmmeta --savedf
+-fa : fasta file containing experimental sequences of interest
+-ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation
+-k : value of k to use, typically between 4 and 6 inclusive
+-pwms : path to **folder** containing position weight matrices (PWMs)
+-pwmmeta : txt file containing the metadata for each motif
+--savedf : save name for dataframe containing the results, to be saved in working directory 
+
+**Usage Example**
+
+```
+python motifscanner.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Data/test_reference_gencodelncrna.fa  - -k 4 -pwms ./Test_Data/pwms/Homo_sapiens_2018_10_23_1-29_pm/pwms_all_motifs/ -pwmmeta ./Test_Data/pwms/Homo_sapiens_2018_10_23_1-29_pm/RBP_Information_all_motifs.txt
+```
 
 # API
 
