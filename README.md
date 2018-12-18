@@ -45,7 +45,7 @@ python seekranalysis.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Da
 **Usage Example**
 
 ```
-python motifscanner.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Data/test_reference_gencodelncrna.fa  - -k 4 -pwms ./Test_Data/pwms/Homo_sapiens_2018_10_23_1-29_pm/pwms_all_motifs/ -pwmmeta ./Test_Data/pwms/Homo_sapiens_2018_10_23_1-29_pm/RBP_Information_all_motifs.txt
+python motifscanner.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Data/test_reference_gencodelncrna.fa -k 4 -pwms ./Test_Data/pwms/Homo_sapiens_2018_10_23_1-29_pm/pwms_all_motifs/ -pwmmeta ./Test_Data/pwms/Homo_sapiens_2018_10_23_1-29_pm/RBP_Information_all_motifs.txt
 ```
 
 # API
