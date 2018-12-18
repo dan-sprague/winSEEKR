@@ -21,7 +21,7 @@ Includes
 3. pwms/ -> directory containing motifs and metadata files 
 
 # Scripts
-
+For basic/most common analysis pipelines using SEEKR
 ## seekranalysis.py -fa -ref -k -savecorr
 
 -fa : fasta file containing experimental sequences of interest<br/>
