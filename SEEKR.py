@@ -110,7 +110,7 @@ class SEEKR(object):
     k-mer profiles
 
     Input: Dictionary of k-mer profiles, or the kmer_profile attribute of a SEEKR object
-    Output: pandas dataframe 
+    Output: pandas dataframe
     '''
     def correlate_kmerprofiles(self,savename=None):
         df = pd.DataFrame.from_dict(self.kmer_profile)
@@ -118,7 +118,7 @@ class SEEKR(object):
         if savename:
             corr.to_csv(f'./{savename}.csv')
         return corr
-
+        
     def save_kmer_profile(self,savename='kmer_profile'):
         pickle.dump(self.kmer_profile,open(f'./{savename}.p','wb'))
 
