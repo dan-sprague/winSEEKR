@@ -27,7 +27,7 @@ Includes
 -fa : fasta file containing experimental sequences of interest<br/>
 -ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation<br/>
 -k : value of k to use, typically between 4 and 6 inclusive<br/>
--savecorr : filename for correlation matrix, if not specified matrix will only be printed to terminal<br/>
+-savecorr : filename for correlation matrix to be saved in working directory, if not specified matrix will only be printed to terminal<br/>
 
 **Usage Example**
 ```
