@@ -23,7 +23,7 @@ Includes
 # Scripts
 For basic/most common analysis pipelines using SEEKR
 ## seekranalysis.py -fa -ref -k -savecorr
-
+<t>Generates a correlation matrix based on the k-mer content of given sequences
 -fa : fasta file containing experimental sequences of interest<br/>
 -ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation<br/>
 -k : value of k to use, typically between 4 and 6 inclusive<br/>
@@ -35,6 +35,7 @@ python seekranalysis.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Da
 ```
 
 ## motifscanner.py -fa -ref -k -pwm -pwmmeta --savedf
+<t>Generates a dataframe containing Position Weighted Matrix (PWM) weighted z-scores for supplied sequences.
 -fa : fasta file containing experimental sequences of interest<br/>
 -ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation<br/>
 -k : value of k to use, typically between 4 and 6 inclusive<br/>
