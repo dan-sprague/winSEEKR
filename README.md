@@ -17,7 +17,7 @@ pip install -r requirements.txt
 
 Includes
 1. test_xistandrsxrepeats.fa -> represents your experimental sequences of interest
-2. test_reference_gencodelncrna -> represents whatever reference set of sequences you wish to use
+2. test_reference_gencodelncrna.fa -> represents whatever reference set of sequences you wish to use
 3. pwms/ -> directory containing motifs and metadata files 
 
 # Scripts
