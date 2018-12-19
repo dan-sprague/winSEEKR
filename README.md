@@ -25,12 +25,11 @@ For standard analysis techniques using SEEKR<br/>
 ## seekranalysis.py -fa -ref -k -savecorr
 Generates a correlation matrix based on the k-mer content of given sequences<br/><br/>
 
-<hr/>
 -fa : fasta file containing experimental sequences of interest<br/>
 -ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation<br/>
 -k : value of k to use, typically between 4 and 6 inclusive<br/>
 -savecorr : filename for correlation matrix to be saved in working directory, if not specified matrix will only be printed to terminal<br/>
-<hr/>
+
 **Usage Example**
 ```
 python seekranalysis.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Data/test_reference_gencodelncrna.fa  -k 5
@@ -38,14 +37,14 @@ python seekranalysis.py -fa ./Test_Data/test_xistandrsxrepeats.fa -ref ./Test_Da
 
 ## motifscanner.py -fa -ref -k -pwm -pwmmeta --savedf
 Generates a dataframe containing Position Weighted Matrix (PWM) weighted z-scores for supplied sequences.<br/><br/>
-<hr/>
+
 -fa : fasta file containing experimental sequences of interest<br/>
 -ref : fasta file containing sequences to be used as a reference for k-mer z-score calculation<br/>
 -k : value of k to use, typically between 4 and 6 inclusive<br/>
 -pwms : path to **folder** containing position weight matrices (PWMs)<br/>
 -pwmmeta : txt file containing the metadata for each motif<br/>
 --savedf : save name for dataframe containing the results, to be saved in working directory, defaults to dataframe.csv <br/>
-<hr/>
+
 **Usage Example**
 
 ```
