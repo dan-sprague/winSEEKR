@@ -56,7 +56,7 @@ class SEEKR(object):
         self.k = k
         self.bases = ['A','T','C','G']
         self.keys = [''.join(p) for p in itertools.product(self.bases,repeat=self.k)]
-        if reference[:-1] is 'p':
+        if reference[-1:] is 'p':
             self.reference = pickle.load(open(reference,'rb'))
         else:
             self.reference = self.generate_ref(reference)
@@ -71,10 +71,22 @@ class SEEKR(object):
         return dict(zip(self.keys,np.zeros(4**self.k)))
 
     '''
+    return raw k-mer counts for each sequence
+    '''
+    def raw_kmercounts(self):
+        counts = {}
+        d = collections.OrderedDict(zip(self.keys,range(0,4**self.k)))
+        seqinfo = zip(self.seqnames,self.fasta.get_seqs())
+        for header,seq in seqinfo:
+            counts[header] = kmerprofilelib.count_kmers(seq,self.k,d,norm=False)
+        return counts
+
+    '''
     Calculate length normalized, standardized k-mer counts for sequences
     of interest
     '''
-    def kmer_profile(self):
+
+    def kmer_profile(self,log=True):
 
         kmerprofile_dict = {}
         ref_kmers = [v for i,v in self.reference.items() if f'{self.k}mer' in i]
@@ -82,11 +94,15 @@ class SEEKR(object):
         arr = (kmerprofilelib.target_norm(ref_kmers[0],seqs,self.k))
         ''' translate and log transform
         '''
-        arr = np.log2(arr+np.abs(np.min(arr))+1)
-
-        for seq_name,row in enumerate(arr):
-            kmerprofile_dict[f'{headers[seq_name]}_{self.k}mers'] = row
-        return kmerprofile_dict
+        if log:
+            arr = np.log2(arr+np.abs(np.min(arr))+1)
+        if len(arr.shape) == 1:
+            kmerprofile_dict[f'{headers[0]}_{self.k}mers'] = arr
+            return kmerprofile_dict
+        else:
+            for seq_name,row in enumerate(arr):
+                kmerprofile_dict[f'{headers[seq_name]}_{self.k}mers'] = row
+            return kmerprofile_dict
 
     '''
     Generate the reference set of length normalized k-mer counts for use in

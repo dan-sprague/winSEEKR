@@ -9,7 +9,7 @@ from scipy.stats.stats import pearsonr
 import sys
 import fasta_reader
 import matplotlib
-matplotlib.use('agg')
+#matplotlib.use('agg')
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
@@ -54,13 +54,14 @@ Anaconda Distribution
 #   1. Array of kmers for sequence (ndarray)
 '''
 
-def count_kmers(fa,k,d):
+def count_kmers(fa,k,d,norm=True):
     currlen = len(fa)
     vals = np.zeros(len(d))
     for i in range(currlen-k+1):
         if fa[i:i+k] in d:
             vals[d[fa[i:i+k]]]+=1
-    vals = 1000*(vals/currlen)
+    if norm:
+        vals = 1000*(vals/currlen)
     return vals
 '''
 # This function normalizes kmer counts relative to the

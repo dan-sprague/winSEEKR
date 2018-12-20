@@ -55,6 +55,7 @@ class proteinSEEKR(SEEKR):
 
         self.motif_path = motif_path
         self.pwms = self.read_motifs()
+        self.kmer_profile = SEEKR.kmer_profile(self,log=False)
 
 
     '''read in motifs '''

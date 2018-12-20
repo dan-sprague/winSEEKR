@@ -54,8 +54,10 @@ class SEEKRscanner(SEEKR):
 
     '''
 
-    def __init__(self,motif_path,fasta_file,k=5,reference):
+    def __init__(self,motif_path,fasta_file,reference,k,windowLength,slide,threshold):
         super(SEEKRscanner,self).__init__(fasta_file,k,reference)
 
         self.motif_path = motif_path
-        self.pwms = self.read_motifs()
+        self.windowLength = windowLength
+        self.slide = slide
+        self.treshold = threshold
