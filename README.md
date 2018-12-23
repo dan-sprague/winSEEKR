@@ -22,7 +22,7 @@ Includes
 
 # Scripts
 For standard analysis techniques using SEEKR<br/>
-## seekranalysis.py -fa -ref -k -savecorr
+## seekranalysis.py -fa -ref -k --savecorr
 Generates a correlation matrix based on the k-mer content of given sequences<br/><br/>
 
 -fa : fasta file containing experimental sequences of interest<br/>
