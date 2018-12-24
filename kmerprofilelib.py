@@ -86,14 +86,14 @@ def target_norm(ref,target,k):
     d = collections.OrderedDict(zip(keys,range(0,pos)))
     if len(target) == 1:
         tilenorms = np.zeros(pos)
-        target_kmer_count = count_kmers(target[0].upper(),k,d)
+        target_kmer_count = count_kmers(target[0].upper(),k,d.copy())
         target_kmer_count_norm = (target_kmer_count-means)/sd
         tilenorms = target_kmer_count_norm
     else:
         tilenorms = np.zeros((len(target),pos))
         j = 0
         for seq in target:
-            target_kmer_count = count_kmers(seq.upper(),k,d)
+            target_kmer_count = count_kmers(seq.upper(),k,d.copy())
             target_kmer_count_norm = (target_kmer_count-means)/sd
             tilenorms[j] = target_kmer_count_norm
             j+=1
@@ -111,14 +111,14 @@ def target_norm(ref,target,k):
 #      of length 4^k
 '''
 def kmer_pearson(query,target):
-    query = np.log2(query + np.abs(np.min(query)) + 1) #translate and log transform
-    target = np.log2(target + np.abs(np.min(target)) + 1)
-    R,i = np.zeros(len(target)),0
-    R[R==0] = np.nan
-    for row in target:
-        R[i] = pearsonr(query,row)[0]
-        i+=1
-    return R
+    target,query = pd.DataFrame(target).T, pd.Series(query)
+    return target.corrwith(query)
+    # R,i = np.zeros(len(target)),0
+    # R[R==0] = np.nan
+    # for row in target:
+    #     R[i] = pearsonr(query,row)[0]
+    #     i+=1
+    # return R
 
 ''' tile_seq
 
@@ -130,113 +130,12 @@ output: list of strings
 '''
 
 def tile_seq(fa,length,skip):
-    reader = fasta_reader.Reader(fa)
-    fa = [i.upper() for i in reader.get_seqs()]
-    tiles = [fa[0][i:i+length] for i in range(0,len(fa[0]),skip)]
+    fa = fa.upper()
+    tiles = [fa[i:i+length] for i in range(0,len(fa),skip)]
     return tiles
 
-''' make_plot
-
-saves a plot of the current dseekr instance
-
-input:
-    1. reference set of k-mer counts to establish what percentile our tiled sequences fall within
-    2. pearson R array
-    3. plot title
-    4. x axis title
-    5. savename
-    6. threshold to call significant points (standard deviations)
-
-output:
-    1. pdf file of plot
-
-'''
-
-def make_plot(lncref,R,title,xtitle,savename,sd):
-    sns.set_context(context='talk',font_scale=2)
-    R = pd.DataFrame(R,columns=['Rval'])
-    x,y = [None,None]
-    lncref = pd.DataFrame(lncref,columns=['Rval'])
-    # Points that pass a given threshold of 'significance'
-    rpass = [(R.index[R['Rval']==point][0],point) for point in R['Rval'] if point >= lncref['Rval'].mean()+(lncref['Rval'].std()*sd)]
-    if len(rpass) > 0: # is there anything to plot?
-        x,y = zip(*rpass)
-    fig,(ax1,ax2) = plt.subplots(1,2,figsize=(14,4.8),sharey=True,gridspec_kw = {'width_ratios':[1, 5]})
-    # Plot reference KDE/Histogram next to line plot
-    sns.distplot(lncref[lncref['Rval']<.3],vertical=True,ax=ax1,label='mm10 lncome',color='C1')
-    ax1.grid(False)
-    ax1.invert_xaxis()
-    # Scatter plot of values that pass threshold
-    ax2.scatter(x,y,label=xtitle,color='C1')
-    # Plot all points along transcript
-    ax2.plot(R['Rval'])
-    ax2.set_ylim(-.1,R['Rval'].max()+.06)
-
-    ### plot lines correspond to standard deviations of Pearons comparisons in reference set
-    ax2.axhline(np.mean(lncref['Rval'])+np.std(lncref['Rval']),linestyle='--',color='orange')
-    ax2.axhline(np.mean(lncref['Rval'])+np.std(lncref['Rval'])*2,linestyle='--',color='orange')
-    ax2.axhline(np.mean(lncref['Rval'])+np.std(lncref['Rval'])*3,linestyle='--',color='orange')
 
 
-    ax2.set_xlim([0, len(R)])
-    # Below code is a for a specific experiment done earlier, remove when developing further
-    locs = list(ax2.get_xticks())
-    locs+=[34,77,198,207,281,292,348,991,1196,1272]
-    ax2.set_xticks(list(np.arange(0,len(R),500))+locs)
-    ax2.set_xticklabels(labels=[i/10 for i in np.arange(0,len(R),500)]+locs,rotation=90)
-    #ax3 = ax2.twinx()
-    #ax3.scatter(x=data['target'],y=data['Bit'],s=10*data['E']**2,color='r',label='nhmmer')
-    #ax3.set(ylabel='Normalized Bit Score')
-
-    ax1.set(ylabel='')
-    plt.title('')
-    #plt.tight_layout()
-   # fig.legend(bbox_to_anchor=(.1, .9), loc=2, borderaxespad=0,mode='expand')
-
-    plt.xlabel('')
-    plt.savefig(f'{savename}_{sd}sd.pdf')
-    plt.close()
-    return
-
-
-'''
-legacy code
-
-This function fragments a DNA sequence into overlapping tiles, and then performs
-SEEKR against a set of query sequences that are known to represent some biological
-function/phenomena (for example, the tandem repeats of Xist). The output is a plot
-of the pearson values going along the length of the tiled DNA sequence. Pearson scores
-higher than 3sd of our reference distribution are highlighted as 'hits'
-
-This function is called by the partial() function in a launching script using
-the multiprocessing module
-
-This function is going to be split and implemented into a more abstracted structure
-in future development, however this function represents a standard workflow for our
-work
-
-'''
-def dseekr(sd,tiled,l,s,plot_dict,lncref,queryfiles,plotrefs,k,fa_files):
-    #Tile the currently open fa file
-    queryfiles_kmers = dict([(i,v) for i,v in queryfiles.items() if f'{k}mer' in i]) # extract query kmer set for appropriate value of k
-    queryfiles_kmers = dict(sorted(queryfiles_kmers.items())) # "sort" the keys alphabetically
-    lncref_kmers = [v for i,v in lncref.items() if f'{k}mer' in i] #extract the reference set for the approopriate value of k
-    if not tiled:
-        curr_tile_fa = tile_seq(fa_files,l,s)
-    elif tiled:
-        infile = open(fa_files)
-        curr_tile_fa = [line.upper() for line in infile]
-    #Calculate normalized 4,5,6mers
-    curr_normcount = target_norm(lncref_kmers[0],curr_tile_fa,k) # calculate standardized and length norm'd k-mer counts
-    for query in queryfiles_kmers:
-        print(query)
-        lncomedata = plotrefs[plot_dict[os.path.basename(query)]]
-        curr_q = queryfiles_kmers[query]
-        R = kmer_pearson(curr_q,curr_normcount)
-        make_plot(lncomedata, R,
-        f'{os.path.basename(query)}+{os.path.basename(fa_files)}',f'{os.path.basename(fa_files)}',
-        f'{os.path.basename(query)}_{os.path.basename(fa_files)}_plot',sd)
-        np.savetxt(f'{os.path.basename(query)}_{os.path.basename(fa_files)}_data.txt',R,delimiter=',')
 
 
 '''
