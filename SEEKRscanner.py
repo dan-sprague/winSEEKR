@@ -11,7 +11,7 @@ import numpy as np
 import pickle
 from itertools import groupby
 from tqdm import tqdm as tqdm
-
+from scipy import stats
 
 from SEEKR import SEEKR
 
@@ -98,6 +98,19 @@ class SEEKRscanner(SEEKR):
         df = pd.DataFrame(R.T)
         df.columns = self.seqnames
         return df
+
+    def percentile(self,scan_df,distribution_df):
+        out = {}
+        for col in scan_df:
+            matching_dist = distribution_df[col]
+            ranks = scan_df[col].apply(lambda x: stats.percentileofscore(matching_dist.sort_values(),x))
+            out[col] = ranks
+
+        df = pd.DataFrame.from_dict(out)
+        df.columns = self.seqnames
+        return df
+
+
 
 
 
