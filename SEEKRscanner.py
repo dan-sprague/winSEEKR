@@ -85,8 +85,7 @@ class SEEKRscanner(SEEKR):
                 R[i] = kmerprofilelib.kmer_pearson(profile,normcount_arr)
             df = pd.DataFrame(R.T)
             df.columns = self.seqnames
-            df.to_csv('./test.csv')
-        return df 
+        return df
 
 
     # def make_plot(lncref,R,title,xtitle,savename,sd):
