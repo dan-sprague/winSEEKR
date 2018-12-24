@@ -87,6 +87,20 @@ class SEEKRscanner(SEEKR):
             df.columns = self.seqnames
         return df
 
+    def querydist(self):
+        ref = [v for i,v in self.reference.items() if f'{self.k}mer' in i][0]
+        norm_ref = (ref-np.mean(ref,axis=0))/np.std(ref,axis=0)
+        norm_ref_log = np.log2(norm_ref + np.abs(np.min(norm_ref))+1)
+        R = np.zeros((len(self.kmer_profile),np.size(norm_ref_log,0)))
+
+        for i,(query,profile) in enumerate(self.kmer_profile.items()):
+            R[i]=kmerprofilelib.kmer_pearson(profile,norm_ref_log)
+        df = pd.DataFrame(R.T)
+        df.columns = self.seqnames
+        return df
+
+
+
 
     # def make_plot(lncref,R,title,xtitle,savename,sd):
     #     sns.set_context(context='talk',font_scale=2)
