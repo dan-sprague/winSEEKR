@@ -72,20 +72,49 @@ class SEEKRscanner(SEEKR):
         self.windowLength = windowLength
         self.slide = slide
         self.treshold = threshold
+'''
+Scan a sequence of interest by tiling the sequence into overlapping windows,
+specified by user
 
-    def scan(self):
+Then compare each query (a library of DNA sequences with a known function) to each
+tile by calculating Pearson Correlation
+'''
+    def scan(self,logt = True):
         seqs,headers = self.fa.get_seqs(), self.fa.get_headers()
         ref = [v for i,v in self.reference.items() if f'{self.k}mer' in i][0]
+        '''
+        #For each sequence in input file, tile the sequence specified
+        #by window length and slide attributes, then calculate
+        #Pearson coeff
+
+        Currently only works for a single sequence
+        '''
         for seq in seqs:
             tiles = kmerprofilelib.tile_seq(seq,self.windowLength,self.slide)
             normcount_arr = kmerprofilelib.target_norm(ref,tiles,self.k)
-            normcount_arr = np.log2(normcount_arr + np.abs(np.min(normcount_arr))+1)
+            '''log transform '''
+            if logt:
+                normcount_arr = np.log2(normcount_arr + np.abs(np.min(normcount_arr))+1)
             R = np.zeros((len(self.kmer_profile),len(tiles)))
+            ''' tile by tile pearson calculation against query '''
             for i,(query,profile) in enumerate(self.kmer_profile.items()):
                 R[i] = kmerprofilelib.kmer_pearson(profile,normcount_arr)
             df = pd.DataFrame(R.T)
             df.columns = self.seqnames
         return df
+
+'''
+
+Within the reference set of sequences specified by the user, for example
+all transcriptome sequences, all lncRNAs, etc, calculate the distribution of all
+Pearson correlations against the queries specified by the user
+
+Used to determine the mean and standard deviation of Pearson similarity
+of functional R/DNA sequences (ex: Xist repeats) against reference set
+
+
+'''
+
 
     def querydist(self):
         ref = [v for i,v in self.reference.items() if f'{self.k}mer' in i][0]
@@ -98,7 +127,12 @@ class SEEKRscanner(SEEKR):
         df = pd.DataFrame(R.T)
         df.columns = self.seqnames
         return df
+'''
 
+Simply return the percentile of a given tiles pearson score from the distribution
+calculated from the querydist() function 
+
+'''
     def percentile(self,scan_df,distribution_df):
         out = {}
         for col in scan_df:
