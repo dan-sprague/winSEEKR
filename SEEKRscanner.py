@@ -27,7 +27,6 @@ Anaconda Distribution
 
 
 class SEEKRscanner(SEEKR):
-
     '''
     Scans given sequences of interest (targets) for regions of high correlation
     to a set of known functional sequences (queries)
@@ -67,20 +66,19 @@ class SEEKRscanner(SEEKR):
 
     def __init__(self,queries,head,seq,reference,k,windowLength,slide,threshold):
         super(SEEKRscanner,self).__init__(queries,reference,k)
-
         self.seq = seq
         self.head = head
         self.windowLength = windowLength
         self.slide = slide
         self.treshold = threshold
-'''
-Scan a sequence of interest by tiling the sequence into overlapping windows,
-specified by user
+    '''
+    Scan a sequence of interest by tiling the sequence into overlapping windows,
+    specified by user
 
-Then compare each query (a library of DNA sequences with a known function) to each
-tile by calculating Pearson Correlation
-'''
-    def scan(self,logt = True):
+    Then compare each query (a library of DNA sequences with a known function) to each
+    tile by calculating Pearson Correlation
+    '''
+    def scan(self,logt=True):
         ref = [v for i,v in self.reference.items() if f'{self.k}mer' in i][0]
         '''
         #For each sequence in input file, tile the sequence specified
@@ -102,17 +100,17 @@ tile by calculating Pearson Correlation
         df.columns = self.seqnames
         return df
 
-'''
+    '''
 
-Within the reference set of sequences specified by the user, for example
-all transcriptome sequences, all lncRNAs, etc, calculate the distribution of all
-Pearson correlations against the queries specified by the user
+    Within the reference set of sequences specified by the user, for example
+    all transcriptome sequences, all lncRNAs, etc, calculate the distribution of all
+    Pearson correlations against the queries specified by the user
 
-Used to determine the mean and standard deviation of Pearson similarity
-of functional R/DNA sequences (ex: Xist repeats) against reference set
+    Used to determine the mean and standard deviation of Pearson similarity
+    of functional R/DNA sequences (ex: Xist repeats) against reference set
 
 
-'''
+    '''
 
 
     def querydist(self):
@@ -126,12 +124,12 @@ of functional R/DNA sequences (ex: Xist repeats) against reference set
         df = pd.DataFrame(R.T)
         df.columns = self.seqnames
         return df
-'''
+    '''
 
-Simply return the percentile of a given tiles pearson score from the distribution
-calculated from the querydist() function
+    Simply return the percentile of a given tiles pearson score from the distribution
+    calculated from the querydist() function
 
-'''
+    '''
     def percentile(self,scan_df,distribution_df):
         out = {}
         for col in scan_df:

@@ -1,3 +1,4 @@
+
 import glob
 import collections
 import itertools
@@ -50,12 +51,13 @@ class SEEKR(object):
 
     '''
 
-    def __init__(self,fasta_file,reference,k):
+    def __init__(self,fasta_file,reference,k,logt=True):
         self.fasta_file = fasta_file
         self.fasta = far.Reader(fasta_file)
         self.k = k
         self.bases = ['A','T','C','G']
         self.keys = [''.join(p) for p in itertools.product(self.bases,repeat=self.k)]
+        self.logt = logt
         if reference[-1:] is 'p':
             self.reference = pickle.load(open(reference,'rb'))
         else:
@@ -86,7 +88,7 @@ class SEEKR(object):
     of interest
     '''
 
-    def kmer_profile(self,log=True):
+    def kmer_profile(self):
 
         kmerprofile_dict = {}
         ref_kmers = [v for i,v in self.reference.items() if f'{self.k}mer' in i]
@@ -94,7 +96,7 @@ class SEEKR(object):
         arr = (kmerprofilelib.target_norm(ref_kmers[0],seqs,self.k))
         ''' translate and log transform
         '''
-        if log:
+        if self.logt:
             arr = np.log2(arr+np.abs(np.min(arr))+1)
         if len(arr.shape) == 1:
             kmerprofile_dict[f'{headers[0]}_{self.k}mers'] = arr
@@ -131,9 +133,9 @@ class SEEKR(object):
     Input: Dictionary of k-mer profiles, or the kmer_profile attribute of a SEEKR object
     Output: pandas dataframe
     '''
-    def correlate_kmerprofiles(self,savename=None):
+    def correlate_kmerprofiles(self,savename=None,method='pearson'):
         df = pd.DataFrame.from_dict(self.kmer_profile)
-        corr = df.corr()
+        corr = df.corr(method=method)
         if savename:
             corr.to_csv(f'./{savename}.csv')
         return corr

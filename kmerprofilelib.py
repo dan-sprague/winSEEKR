@@ -137,7 +137,6 @@ def tile_seq(fa,length,skip):
 
 
 
-
 '''
 
 This function fragments a DNA sequence into overlapping tiles, and then performs

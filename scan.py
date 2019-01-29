@@ -1,4 +1,4 @@
-from SEEKRscanner import SEEKRscaner
+from SEEKRscanner import SEEKRscanner
 import fasta_reader as far
 import argparse
 import pickle
@@ -24,4 +24,6 @@ for i,seq in enumerate(seqs):
     seqscan = SEEKRscanner(args.q,headers[i],seq,args.ref,args.k,args.w,args.s,args.thresh)
     distributions = seqscan.querydist()
     scan_df = seqscan.scan()
-    percentile = seq.scan()
+    percentile_df = seqscan.percentile(scan_df,distributions)
+
+    print(percentile_df)

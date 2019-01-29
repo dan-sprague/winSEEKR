@@ -91,12 +91,12 @@ class proteinSEEKR(SEEKR):
     c = column of PWM, with values A,T,C, or G
 
     '''
-    def calc_prob(self,p,j,pwm,kmer):
-        for i,c in enumerate(kmer):
+    def calc_prob(self,p,frame,pwm,kmer):
+        for current_position,nucleotide in enumerate(kmer):
             if p is None:
-                p = self.pwms[pwm].iloc[i+j][c]
+                p = self.pwms[pwm].iloc[current_position+frame][nucleotide]
             else:
-                p*=self.pwms[pwm].iloc[i+j][c]
+                p*=self.pwms[pwm].iloc[current_position+frame][nucleotide]
         return p
 
     '''for all PWMs, calculate probabilities and store in dictionary'''
@@ -129,12 +129,12 @@ class proteinSEEKR(SEEKR):
                 No motif is < 4 base pairs, hence default of k = 4
                 '''
                 nkmers = lenmotif - 4 + 1
-                start = list(range(nkmers)) # possible starting positions of a k-mer in a motif
+                frames = list(range(nkmers)) # possible starting positions of a k-mer in a motif
 
                 for sub_kmers,kmer in kmers_within_kmer:
                     for sub_kmer in sub_kmers:
-                        for j in start:
-                            p = self.calc_prob(None,j,pwm,sub_kmer)
+                        for frame in frames:
+                            p = self.calc_prob(None,frame,pwm,sub_kmer)
                             d[kmer]+=p
                 pwm_dict[pwm] = d.copy()
                 d.clear()
@@ -146,8 +146,8 @@ class proteinSEEKR(SEEKR):
                 d = self.gen_kmersdict()
                 for kmer in self.keys:
                     nkmers = lenmotif - self.k + 1
-                    start = list(range(nkmers))
-                    for j in start:
+                    frames = list(range(nkmers))
+                    for frame in frames:
                         p = self.calc_prob(None,j,pwm,kmer)
                         d[kmer] += p
                 pwm_dict[pwm] = d.copy()
@@ -175,16 +175,11 @@ class proteinSEEKR(SEEKR):
     a protein binding motif
     '''
     def kmer_weights(self,probabilities):
-        zscores,scoredict = self.get_zscore_df(), collections.defaultdict(list)
-        for pwm_name in probabilities:
-            working_zscores,working_weights = zscores.copy(), probabilities[pwm_name].copy()
-            for index,row in working_zscores.iterrows():
-                row = row * working_weights[index]
-                working_zscores.loc[index] = row
-            scores =[]
-            for sequence in working_zscores:
-                scores.append(sum(v for v in working_zscores[sequence]))
-            scoredict[pwm_name] = scores
+        z_scores = self.get_zscore_df()
+        sorted_weights = np.array([kmer2weight[k] for k in z_scores.columns])
+        weighted_z_scores = z_scores.values.copy() * sorted_weights
+        scores_sums = weighted_z_scores.sum(axis=1)
+        score_dict[pwm_path.name] = scores_sums
         return scoredict
 
     '''
